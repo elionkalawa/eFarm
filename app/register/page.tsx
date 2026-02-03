@@ -23,21 +23,15 @@ export default function RegisterPage() {
       const result = await registerAction({ email, password, fullName });
 
       if (result.success) {
-        if (result.hasSession) {
-          router.push("/");
-          router.refresh();
-        } else {
-          setError(
-            result.message ||
-              "Registration successful. Please check your email.",
-          );
-          setLoading(false);
-        }
+        // Registration successful, redirect to home
+        router.push("/");
+        router.refresh();
       } else {
         setError(result.error || "An error occurred during registration.");
         setLoading(false);
       }
     } catch (err) {
+      console.log(err);
       setError("A network error occurred.");
       setLoading(false);
     }

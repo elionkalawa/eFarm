@@ -2,13 +2,13 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getSession } from "@/lib/auth";
 import { User } from "@/types";
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const session = await getSession();
   const user = session?.user as User | undefined;
   const path = request.nextUrl.pathname;
 
   console.log(
-    `[MIDDLEWARE] Path: ${path} | User: ${user?.email || "Guest"} | Role: ${user?.role || "None"}`,
+    `[PROXY] Path: ${path} | User: ${user?.email || "Guest"} | Role: ${user?.role || "None"}`,
   );
 
   // Public routes that don't need auth
