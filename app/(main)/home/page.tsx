@@ -122,53 +122,50 @@ export default function HomePage() {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-10 bg-gray-50 shadow-sm px-4 rounded-2xl py-4 sm:grid-cols-2 lg:grid-cols-5 xl:gap-x-2">
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="group relative bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                className="group relative bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow"
               >
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200 group-hover:opacity-75 relative h-64">
+                <div className="h-48 aspect-w-2 w-full overflow-hidden bg-gray-200 group-hover:opacity-75 relative ">
                   {product.image_url ? (
                     <Image
                       src={product.image_url}
                       alt={product.name}
                       fill
-                      className="h-full w-full object-cover object-center"
+                      className="h-full w-full object-fill object-center"
                     />
                   ) : (
-                    <div className="h-full w-full bg-gray-50 flex items-center justify-center text-gray-400">
+                    <div className="h-12 w-full bg-gray-50 flex items-center justify-center text-gray-400">
                       No Image
                     </div>
                   )}
                 </div>
                 <div className="p-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-sm font-semibold text-gray-900">
-                        <Link href={`/products/${product.id}`}>
-                          <span
-                            aria-hidden="true"
-                            className="absolute inset-0"
-                          />
-                          {product.name}
-                        </Link>
-                      </h3>
-                      <p className="mt-1 text-xs text-indigo-600 font-medium">
-                        {product.category}
-                      </p>
-                      {product.description && (
-                        <p className="mt-2 text-xs text-gray-500 line-clamp-2">
-                          {product.description}
-                        </p>
-                      )}
+                  <div>
+                    <div className="h-12">
+                      <h3 className="text-sm  font-semibold text-black">
+                      <Link href={`/products/${product.id}`}>
+                        <span
+                          aria-hidden="true"
+                          className="absolute inset-0"
+                        />
+                        {product.name}
+                      </Link>
+                    </h3>
                     </div>
-                    <p className="text-sm font-bold text-gray-900">
-                      KES {product.price.toLocaleString()}
+                    
+                    <p className="mt-1 text-xs text-indigo-600 font-medium">
+                      {product.category}
+                    </p>
+                    
+                    <p className="mt-3 text-lg font-bold text-gray-900">
+                      Ksh. {product.price.toLocaleString()}
                     </p>
                   </div>
                   <div className="mt-4">
-                    <button className="w-full bg-gray-50 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-indigo-600 hover:text-white transition-colors">
+                    <button className="w-full bg-indigo-600 text-white py-2 rounded-full text-sm  font-bold hover:bg-indigo-600 hover:text-white transition-colors">
                       View Details
                     </button>
                   </div>

@@ -31,7 +31,7 @@ export default async function ProductDetailPage({
           <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
             {/* Image gallery */}
             <div className="flex flex-col-reverse">
-              <div className="aspect-h-1 aspect-w-1 w-full relative h-[400px]">
+              <div className="aspect-h-1 aspect-w-1 w-full relative h-96">
                 {product.image_url ? (
                   <Image
                     src={product.image_url}
