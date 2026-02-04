@@ -29,7 +29,7 @@ export default async function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      <div>
+      <div className="bg-gray-100/90 py-3 px-3 rounded-2xl">
         <h1 className="text-3xl font-semibold text-black mb-2">
           Welcome back, {user?.full_name ?? user?.email ?? "Admin"} <span role="img" aria-label="waving hand">👋</span>
         </h1>

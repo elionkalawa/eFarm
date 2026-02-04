@@ -17,7 +17,7 @@ export default async function AdminOrdersPage() {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
-      <div className="sm:flex sm:items-center">
+      <div className="sm:flex sm:items-center bg-gray-100/90 py-3 px-3 rounded-2xl">
         <div className="sm:flex-auto">
           <h1 className="text-xl font-semibold text-gray-900">Orders</h1>
           <p className="mt-2 text-sm text-gray-700">
