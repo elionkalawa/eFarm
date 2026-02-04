@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { updateUserRoleAction } from "./actions";
-import { Loader2, Shield, User, ShieldAlert } from "lucide-react";
+import { updateUserRoleAction, deleteUserAction } from "./actions";
+import { Loader2, Shield, User, ShieldAlert, MapPin, Mail, Phone, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface Profile {
@@ -11,6 +11,9 @@ interface Profile {
   email: string;
   role: string;
   created_at: string;
+  location?: string | null;
+  phone?: string | null;
+  avatar_url?: string | null;
 }
 
 interface UserListProps {
@@ -23,6 +26,7 @@ export default function UserList({
   currentUserId,
 }: UserListProps) {
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const router = useRouter();
 
   const handleRoleToggle = async (userId: string, currentRole: string) => {
@@ -55,103 +59,149 @@ export default function UserList({
     }
   };
 
+  const handleDeleteUser = async (userId: string, userName: string) => {
+    if (userId === currentUserId) {
+      alert("You cannot delete your own account.");
+      return;
+    }
+
+    if (
+      !confirm(
+        `Are you sure you want to permanently delete ${userName}? This action cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    setDeletingId(userId);
+    try {
+      const result = await deleteUserAction(userId);
+      if (result.success) {
+        router.refresh();
+      } else {
+        alert("Error: " + result.error);
+      }
+    } catch (err) {
+      console.error("Delete user failed:", err);
+      alert("An unexpected error occurred.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   return (
     <div className="mt-8 flex flex-col">
-      <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-          <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                  >
-                    User
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Role
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Joined
-                  </th>
-                  <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                    <span className="sr-only">Actions</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
-                {initialUsers.map((user) => (
-                  <tr key={user.id}>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                      <div className="flex items-center">
-                        <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
-                          <User className="h-6 w-6" />
-                        </div>
-                        <div className="ml-4">
-                          <div className="font-medium text-gray-900">
-                            {user.full_name || "Unnamed User"}
-                          </div>
-                          <div className="text-gray-500 text-xs">
-                            {user.email}
-                          </div>
-                          <div className="text-gray-400 text-[10px] truncate max-w-[150px]">
-                            {user.id}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      <span
-                        className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                          user.role === "admin"
-                            ? "bg-purple-100 text-purple-800"
-                            : "bg-green-100 text-green-800"
-                        }`}
-                      >
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {new Date(user.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                      <button
-                        onClick={() => handleRoleToggle(user.id, user.role)}
-                        disabled={loadingId === user.id}
-                        className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white ${
-                          user.role === "admin"
-                            ? "bg-red-600 hover:bg-red-700"
-                            : "bg-indigo-600 hover:bg-indigo-700"
-                        } disabled:opacity-50`}
-                      >
-                        {loadingId === user.id ? (
-                          <Loader2 className="animate-spin h-4 w-4" />
-                        ) : user.role === "admin" ? (
-                          <>
-                            <ShieldAlert className="mr-1.5 h-4 w-4" />
-                            Remove Admin
-                          </>
-                        ) : (
-                          <>
-                            <Shield className="mr-1.5 h-4 w-4" />
-                            Make Admin
-                          </>
-                        )}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {initialUsers.map((user) => (
+          <div
+            key={user.id}
+            className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+          >
+            {/* Card Header */}
+            <div className="flex flex-col items-center pt-6 pb-4">
+              {/* Avatar */}
+              <div className="h-16 w-16 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white mb-3 overflow-hidden">
+                {user.avatar_url ? (
+                  <img
+                    src={user.avatar_url}
+                    alt={user.full_name || "User"}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User className="h-8 w-8" />
+                )}
+              </div>
+
+              {/* Name */}
+              <h3 className="text-lg font-semibold text-gray-900">
+                {user.full_name || "Unnamed User"}
+              </h3>
+
+              {/* Role Badge */}
+              <span
+                className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold mt-2 ${
+                  user.role === "admin"
+                    ? "bg-blue-100 text-blue-800"
+                    : "bg-gray-100 text-gray-800"
+                }`}
+              >
+                {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+              </span>
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-gray-100"></div>
+
+            {/* Card Body */}
+            <div className="px-6 py-4 space-y-3">
+              {/* Location */}
+              {user.location && (
+                <div className="flex items-center gap-2 text-sm">
+                  <MapPin className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                  <span className="text-gray-600">{user.location}</span>
+                </div>
+              )}
+
+              {/* Email */}
+              <div className="flex items-center gap-2 text-sm">
+                <Mail className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                <span className="text-gray-600 truncate">{user.email}</span>
+              </div>
+
+              {/* Phone */}
+              {user.phone && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Phone className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                  <span className="text-gray-600">{user.phone}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-gray-100"></div>
+
+            {/* Card Footer - Action Buttons */}
+            <div className="px-2 py-2 flex gap-1">
+              <button
+                onClick={() => handleDeleteUser(user.id, user.full_name || user.email)}
+                disabled={deletingId === user.id || loadingId === user.id}
+                className="flex-[1] inline-flex items-center justify-center px-3 py-2 border border-gray-300 text-xs font-medium rounded-2xl shadow-sm text-red-700 bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {deletingId === user.id ? (
+                  <Loader2 className="animate-spin h-4 w-4" />
+                ) : (
+                  <>
+                    <Trash2 className="mr-0 h-4 w-4" />
+                  </>
+                )}
+              </button>
+              
+              <button
+                onClick={() => handleRoleToggle(user.id, user.role)}
+                disabled={loadingId === user.id || deletingId === user.id}
+                className={`flex-[4] inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded-2xl shadow-sm text-white transition-colors ${
+                  user.role === "admin"
+                    ? "bg-red-600 hover:bg-red-700 disabled:bg-red-400"
+                    : "bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400"
+                } disabled:opacity-50`}
+              >
+                {loadingId === user.id ? (
+                  <Loader2 className="animate-spin h-4 w-4" />
+                ) : user.role === "admin" ? (
+                  <>
+                    <ShieldAlert className="mr-1.5 h-4 w-4" />
+                    Remove Admin
+                  </>
+                ) : (
+                  <>
+                    <Shield className="mr-1.5 h-4 w-4" />
+                    Make Admin
+                  </>
+                )}
+              </button>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

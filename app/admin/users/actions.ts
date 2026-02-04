@@ -33,3 +33,30 @@ export async function updateUserRoleAction(
   revalidatePath("/admin/users");
   return { success: true };
 }
+
+export async function deleteUserAction(userId: string) {
+  const supabase = await createAdminClient();
+  const user = await getUser();
+
+  if (!user || user.role !== "admin") {
+    return { success: false, error: "Unauthorized: Admin access required" };
+  }
+
+  // Prevent admin from deleting themselves
+  if (user.id === userId) {
+    return { success: false, error: "You cannot delete your own account" };
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .delete()
+    .eq("id", userId);
+
+  if (error) {
+    console.error("Delete user error:", error);
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath("/admin/users");
+  return { success: true };
+}

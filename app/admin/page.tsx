@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/auth";
 import {
   Package,
   ShoppingBag,
@@ -9,6 +10,7 @@ import {
 
 export default async function AdminDashboard() {
   const supabase = await createClient();
+  const user = await getUser();
 
   // Fetch some stats
   const { count: productsCount } = await supabase
@@ -28,10 +30,10 @@ export default async function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-        <p className="text-gray-500">
-          Overview of your farm management system.
-        </p>
+        <h1 className="text-3xl font-semibold text-black mb-2">
+          Welcome back, {user?.full_name ?? user?.email ?? "Admin"} <span role="img" aria-label="waving hand">👋</span>
+        </h1>
+        <p className="text-black/60 text-sm">This is what is happening in your store today.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

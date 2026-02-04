@@ -39,7 +39,7 @@ export default function AdminSidebar() {
       <div className="p-6 flex items-center justify-between">
         {!collapsed && (
           <Link href="/admin" className="text-xl font-bold text-indigo-600">
-            eFarm Admin
+            EFarm
           </Link>
         )}
         <button
