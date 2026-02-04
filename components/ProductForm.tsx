@@ -220,11 +220,11 @@ export default function ProductForm({
                   className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm p-2 border text-gray-900"
                 >
                   <option value="">Select a category</option>
-                  <option value="Fertilizer">Fertilizer</option>
+                  <option value="Fertilizer">Fertilizers</option>
                   <option value="Seeds">Seeds</option>
                   <option value="Pesticides">Pesticides</option>
-                  <option value="Herbicide">Herbicide</option>
-                  <option value="Equipment">Equipment</option>
+                  <option value="Herbicide">Herbicides</option>
+                  <option value="Equipment">Equipments</option>
                   <option value="Feeds">Animal Feeds</option>
                 </select>
               </div>
