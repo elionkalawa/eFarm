@@ -44,6 +44,11 @@ export async function loginAction(formData: AuthFormData) {
     role: profile.role,
   });
 
+  // Track login in history
+  await supabase
+    .from("login_history")
+    .insert({ user_id: profile.id });
+
   return { success: true };
 }
 

@@ -27,6 +27,27 @@ export default async function AdminDashboard() {
     .order("created_at", { ascending: false })
     .limit(5);
 
+  // Fetch active users (users who logged in today)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const { data: activeUsersData } = await supabase
+    .from("login_history")
+    .select("user_id")
+    .gte("login_at", today.toISOString());
+  
+  // Get unique active users count
+  const uniqueActiveUsers = new Set(
+    activeUsersData?.map((login) => login.user_id) || []
+  ).size;
+
+  // Fetch new users from the past week
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+  const { count: newUsersThisWeek } = await supabase
+    .from("profiles")
+    .select("*", { count: "exact", head: true })
+    .gte("created_at", weekAgo.toISOString());
+
   return (
     <div className="space-y-8">
       <div className="bg-gray-100/90 py-3 px-3 rounded-2xl">
@@ -50,10 +71,10 @@ export default async function AdminDashboard() {
           trend="+12% from last month"
         />
         <StatCard
-          title="Active Users"
-          value="120"
+          title="Active Users (Today)"
+          value={uniqueActiveUsers}
           icon={<Users className="text-purple-600" />}
-          trend="+5 new users"
+          trend={`+${newUsersThisWeek || 0} new users this week`}
         />
         <StatCard
           title="Revenue (Estimated)"

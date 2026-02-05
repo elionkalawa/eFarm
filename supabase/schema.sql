@@ -6,6 +6,7 @@ create table profiles (
   email text unique not null,
   password_hash text not null,
   role text not null check (role in ('admin', 'user')) default 'user',
+  avatar_url text,
   created_at timestamp default now()
 );
 
@@ -30,3 +31,12 @@ create table orders (
   status text default 'pending',
   created_at timestamp default now()
 );
+
+create table login_history (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references profiles(id),
+  login_at timestamp default now()
+);
+
+create index idx_login_history_user_id on login_history(user_id);
+create index idx_login_history_login_at on login_history(login_at);
