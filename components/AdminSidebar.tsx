@@ -69,11 +69,11 @@ export default function AdminSidebar() {
   return (
     <aside
       className={cn(
-        "bg-white border-r border-gray-200 transition-all duration-300 flex flex-col h-screen sticky top-0",
+        "bg-white border-r border-gray-200 transition-all duration-300 flex flex-col h-screen sticky top-0 overflow-hidden",
         collapsed ? "w-20" : "w-64",
       )}
     >
-      <div className="p-6 flex items-center justify-between">
+      <div className="p-6 flex items-center justify-between flex-shrink-0">
         {!collapsed && (
           <div>
             <Link href="/admin" className="text-3xl font-bold text-indigo-600">
@@ -90,7 +90,7 @@ export default function AdminSidebar() {
         </button>
       </div>
 
-      <nav className="flex-1 px-4 space-y-4 mt-4">
+      <nav className="flex-1 px-4 space-y-4 mt-4 overflow-y-auto">
         {/* Main section */}
         <div className="px-3 text-xs text-gray-400 font-semibold uppercase">
           {!collapsed ? "Main" : ""}
@@ -160,11 +160,11 @@ export default function AdminSidebar() {
         </div>
       </nav>
 
-      <div className="p-4 border-t border-gray-100">
+      <div className="p-2 border-t border-gray-100 flex-shrink-0">
         <button
           onClick={signOut}
           className={cn(
-            "flex items-center gap-4 px-3 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-all w-full",
+            "flex items-center gap-4 px-2 py-2 rounded-xl text-red-600 hover:bg-red-50 transition-all w-full",
             collapsed ? "justify-center" : "",
           )}
         >
