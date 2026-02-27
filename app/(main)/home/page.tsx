@@ -6,6 +6,8 @@ import { Product } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { Filter, Search, SlidersHorizontal, Share2, ShoppingCart } from "lucide-react";
+import { useCart } from "@/providers/CartProvider";
+import { useRouter } from "next/navigation";
 
 function HeroSection() {
   return (
@@ -47,6 +49,8 @@ export default function HomePage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [sortBy, setSortBy] = useState("name");
+  const { addToCart } = useCart();
+  const router = useRouter();
 
   const supabase = createClient();
 
@@ -205,7 +209,13 @@ export default function HomePage() {
                         View Details.
                       </button>
                     </Link>
-                    <button className="text-indigo-600 hover:text-green-500 pointer-events-auto py-2 px-3 rounded-full text-sm font-bold transition-colors flex items-center justify-center">
+                    <button
+                      onClick={() => {
+                        addToCart(product, 1);
+                        router.push("/cart");
+                      }}
+                      className="text-indigo-600 hover:text-green-500 pointer-events-auto py-2 px-3 rounded-full text-sm font-bold transition-colors flex items-center justify-center"
+                    >
                       <ShoppingCart className=" h-4 w-4 hover:animate-bounce transition duration-300" />
                     </button>
                     <Link href={`/products/${product.id}`}>

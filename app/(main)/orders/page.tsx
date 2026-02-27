@@ -84,7 +84,7 @@ export default async function OrdersPage() {
 
           let statusText = order.status.charAt(0).toUpperCase() + order.status.slice(1);
           if (order.status === "approved") {
-            statusText = "Delivered";
+            statusText = "Approved";
           }
 
           return (

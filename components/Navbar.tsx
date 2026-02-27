@@ -2,15 +2,18 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { LogOut, Menu, User, X } from "lucide-react";
+import { LogOut, Menu, User, X, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/AuthProvider";
+import { useCart } from "@/providers/CartProvider";
 
 export default function Navbar() {
   const { user, profile, signOut: handleSignOut } = useAuth();
+  const { items } = useCart();
   const [isOpen, setIsOpen] = useState(false);
 
   const isAdmin = profile?.role === "admin";
+  const cartCount = items.length;
 
   return (
     <nav className="bg-white shadow-sm border-b border-gray-100">
@@ -61,6 +64,18 @@ export default function Navbar() {
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
             {user ? (
               <div className="flex items-center space-x-4">
+                <Link
+                  href="/cart"
+                  className="relative p-1 text-gray-500 hover:text-indigo-600 transition-colors"
+                  title="Shopping cart"
+                >
+                  <ShoppingCart className="h-5 w-5 text-indigo-600 hover:text-green-500" />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
+                </Link>
                 <span className="text-sm text-gray-700">
                   {profile?.full_name || user.email}
                 </span>
@@ -158,6 +173,18 @@ export default function Navbar() {
                   {user.email}
                 </div>
               </div>
+              <Link
+                href="/cart"
+                className="ml-auto relative p-2 text-gray-500 hover:text-indigo-600 transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                <ShoppingCart className="h-6 w-6" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
               <button
                 onClick={() => {
                   handleSignOut();
