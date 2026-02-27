@@ -11,7 +11,7 @@ function HeroSection() {
   return (
     <section className="mb-6">
       <div className="mx-auto max-w-8xl px-0 sm:px-6 lg:px-0.5">
-        <div className="rounded-2xl overflow-hidden relative">
+        <div className="rounded-4xl overflow-hidden relative">
           <Image
             src="/576.jpg"
             alt="Catalog background"
@@ -21,12 +21,12 @@ function HeroSection() {
           />
           <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/40 to-black/20" />
           <div className="relative text-white p-4 m-4 flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 pr-6">
+            <div className="md:w-1/2 pr-6 p-4 bg-white/5 rounded-3xl backdrop-blur-xs shadow-2xl">
               <h2 className="text-4xl md:text-6xl hover:scale-110 transition-transform duration-300 font-extrabold font-sans leading-tight mb-4">
-                Elevate your farm produce.
+                Patia Shamba yako Boost!
               </h2>
               <p className="text-sm md:text-base hover:scale-105 transition-transform duration-300 text-indigo-100 mb-6">
-                From premium seeds and balanced fertilizers to reliable tools and nutritious feeds, we supply high-quality, field-tested inputs to help your farm thrive. Locally sourced, trusted by farmers, and backed by expert advice and fast delivery. Grow healthier crops and increase yields with products made for real farms.
+                Kama ni mbegu ,feeds,mbolea, tunakupea ile high-quality.Products zetu ni locally sourced, za kuaminika, na zinaambatana na expert advice and fast delivery. Kuza mifugo na mimea yako na bidhaa zetu bora.
               </p>
               <div className="flex hover:scale-102 transition-transform duration-300 gap-4">
                 <button className="bg-indigo-600 hover:bg-green-500 hover:shadow-2xl text-white py-2 px-4 rounded-full shadow">
@@ -97,7 +97,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white/0 min-h-screen">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <HeroSection />
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
