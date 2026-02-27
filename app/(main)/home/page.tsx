@@ -5,9 +5,9 @@ import { createClient } from "@/lib/supabase/client";
 import { Product } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, Search, SlidersHorizontal, Share2, ShoppingCart } from "lucide-react";
+import { Filter, Search, SlidersHorizontal, Share2, ShoppingCart, Check } from "lucide-react";
 import { useCart } from "@/providers/CartProvider";
-import { useRouter } from "next/navigation";
+// router no longer needed import { useRouter } from "next/navigation";
 
 function HeroSection() {
   return (
@@ -49,8 +49,8 @@ export default function HomePage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [sortBy, setSortBy] = useState("name");
-  const { addToCart } = useCart();
-  const router = useRouter();
+  const { addToCart, items, removeFromCart } = useCart();
+  // const router = useRouter(); // navigation removed
 
   const supabase = createClient();
 
@@ -211,12 +211,19 @@ export default function HomePage() {
                     </Link>
                     <button
                       onClick={() => {
-                        addToCart(product, 1);
-                        router.push("/cart");
+                        if (items.some((i) => i.product.id === product.id)) {
+                          removeFromCart(product.id);
+                        } else {
+                          addToCart(product, 1);
+                        }
                       }}
                       className="text-indigo-600 hover:text-green-500 pointer-events-auto py-2 px-3 rounded-full text-sm font-bold transition-colors flex items-center justify-center"
                     >
-                      <ShoppingCart className=" h-4 w-4 hover:animate-bounce transition duration-300" />
+                      {items.some((i) => i.product.id === product.id) ? (
+                        <Check className="h-4 w-4 text-green-600" />
+                      ) : (
+                        <ShoppingCart className=" h-4 w-4 hover:animate-bounce transition duration-300" />
+                      )}
                     </button>
                     <Link href={`/products/${product.id}`}>
                       <button className="text-gray-700 py-2 px-2 hover:text-green-500 pointer-events-auto rounded-full text-sm font-bold transition-colors flex items-center justify-center">
