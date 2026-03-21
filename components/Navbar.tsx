@@ -76,19 +76,24 @@ export default function Navbar() {
                     </span>
                   )}
                 </Link>
-                <span className="text-sm text-gray-700">
-                  {profile?.full_name || user.email}
-                </span>
-                <span
-                  className={cn(
-                    "px-2 py-0.5 rounded text-xs font-medium uppercase",
-                    isAdmin
-                      ? "bg-purple-100 text-purple-800"
-                      : "bg-green-100 text-green-800",
-                  )}
-                >
-                  {isAdmin ? "Admin" : "User"}
-                </span>
+
+                <div className="flex items-center space-x-3">
+                  <div className="h-9 w-9 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
+                    <User className="h-5 w-5 text-gray-500" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm text-gray-700">
+                      {profile?.full_name || user.email}
+                    </span>
+                    <span className={cn(
+                      "text-xs font-medium uppercase",
+                      isAdmin ? "text-purple-700" : "text-green-700",
+                    )}>
+                      {isAdmin ? "Admin" : "User"}
+                    </span>
+                  </div>
+                </div>
+
                 <button
                   onClick={handleSignOut}
                   className="p-1 rounded-full text-gray-400 hover:text-gray-600 focus:outline-none"
